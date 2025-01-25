@@ -15,69 +15,83 @@ const navigation = () => {
     {
       title: 'Dashboard',
       icon: HomeOutline,
-      path: '/'
+      path: '/',
+      permission:true
+
     },
     {
       title: 'Account Settings',
       icon: AccountCogOutline,
-      path: '/account-settings'
+      path: '/account-settings',
+      permission:true
+
     },
     {
-      sectionTitle: 'Pages'
+      sectionTitle: 'Pages',
+      permission:true
     },
     {
       title: 'Login',
       icon: Login,
       path: '/pages/login',
-      openInNewTab: true
+      // openInNewTab: true
     },
     {
       title: 'Register',
       icon: AccountPlusOutline,
       path: '/pages/register',
-      openInNewTab: true
+      // openInNewTab: true
     },
     {
-      title: 'Register',
+      title: 'Appointment',
       icon: AccountPlusOutline,
-      path: '/pages/register',
-      openInNewTab: true
+      path: '/appointment',
+      // openInNewTab: true
+      permission:true
     },
     {
       title: 'Error',
       icon: AlertCircleOutline,
       path: '/pages/error',
-      openInNewTab: true
+      // openInNewTab: true
+      permission:true
+
     },
     {
-      sectionTitle: 'User Interface'
+      sectionTitle: 'User Interface',
+      permission:true
     },
     {
       title: 'Typography',
       icon: FormatLetterCase,
-      path: '/typography'
+      path: '/typography',
+      permission:true
     },
     {
       title: 'Icons',
       path: '/icons',
-      icon: GoogleCirclesExtended
+      icon: GoogleCirclesExtended,
+      permission:true
     },
     {
       title: 'Cards',
       icon: CreditCardOutline,
-      path: '/cards'
+      path: '/cards',
+      permission:true
     },
     {
       title: 'Tables',
       icon: Table,
-      path: '/tables'
+      path: '/tables',
+      permission:true
     },
     {
       icon: CubeOutline,
       title: 'Form Layouts',
-      path: '/form-layouts'
+      path: '/form-layouts',
+      permission:true
     }
-  ]
+  ].filter((item) => item.permission);
 }
 
 export default navigation
