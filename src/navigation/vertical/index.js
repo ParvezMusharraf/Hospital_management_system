@@ -35,12 +35,14 @@ const navigation = () => {
       icon: Login,
       path: '/pages/login',
       // openInNewTab: true
+      permission:true
     },
     {
       title: 'Register',
       icon: AccountPlusOutline,
       path: '/pages/register',
       // openInNewTab: true
+      permission:true
     },
     {
       title: 'Appointment',
