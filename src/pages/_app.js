@@ -26,6 +26,7 @@ import 'react-perfect-scrollbar/dist/css/styles.css'
 
 // ** Global css styles
 import '../../styles/globals.css'
+import { DBuserConsumer, DBuserProvider } from 'src/contexts/dbuser'
 
 const clientSideEmotionCache = createEmotionCache()
 
@@ -50,7 +51,9 @@ const App = props => {
   const getLayout = Component.getLayout ?? (page => <UserLayout>{page}</UserLayout>)
 
   return (
-    <CacheProvider value={emotionCache}>
+    <>
+    
+    {/* // <CacheProvider value={emotionCache}> */}
       <Head>
         <title>{`${themeConfig.templateName} - Material Design React Admin Template`}</title>
         <meta
@@ -64,11 +67,16 @@ const App = props => {
       <SettingsProvider>
         <SettingsConsumer>
           {({ settings }) => {
-            return <ThemeComponent settings={settings}>{getLayout(<Component {...pageProps} />)}</ThemeComponent>
+            return (
+              <DBuserProvider>
+                  <ThemeComponent settings={settings}>{getLayout(<Component {...pageProps} />)}</ThemeComponent>
+              </DBuserProvider>
+            )
           }}
         </SettingsConsumer>
       </SettingsProvider>
-    </CacheProvider>
+    {/* // </CacheProvider> */}
+    </>
   )
 }
 
