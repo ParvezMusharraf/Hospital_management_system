@@ -20,6 +20,13 @@ const navigation = () => {
 
     },
     {
+      title: 'Manage Docter',
+      icon: HomeOutline,
+      path: '/managedocter',
+      permission:true
+
+    },
+    {
       title: 'Account Settings',
       icon: AccountCogOutline,
       path: '/account-settings',

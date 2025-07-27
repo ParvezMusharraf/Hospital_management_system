@@ -37,6 +37,10 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 // ** Demo Imports
 import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustration'
+import { signupUser } from 'src/services/api'
+import { jwtDecode } from 'jwt-decode'
+import log from 'eslint-plugin-react/lib/util/log'
+import { useRouter } from 'next/router'
 
 // ** Styled Components
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -58,15 +62,54 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
   }
 }))
 
+
 const RegisterPage = () => {
   // ** States
   const [values, setValues] = useState({
     password: '',
-    showPassword: false
+    showPassword: false,
+    email : "",
+    firstname : '',
+    lastname : "",
+    contactNo : "",
   })
+  
+  
+
+  
 
   // ** Hook
   const theme = useTheme()
+  const router = useRouter()
+
+ 
+  const handleSignUp = async()=>{
+    try {
+      console.log("Submitting form with values:", values);
+
+      const res = await signupUser(values)
+      console.log("Res",res);
+      if(res == 'success'){
+        if(res.token){
+          try {
+            localStorage.setItem("accessToken",res.token)
+            const decoded = jwtDecode(res.token)
+             router.push("/")
+          } catch (error) {
+            console.log(error);
+          }
+        }else{
+          console.log("res.token error");
+        }
+      }
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
+
 
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })
@@ -164,8 +207,14 @@ const RegisterPage = () => {
             <Typography variant='body2'>Make your app management easy and fun!</Typography>
           </Box>
           <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
-            <TextField autoFocus fullWidth id='username' label='Username' sx={{ marginBottom: 4 }} />
-            <TextField fullWidth type='email' label='Email' sx={{ marginBottom: 4 }} />
+            <TextField autoFocus fullWidth id='firstname' label='First Name' sx={{ marginBottom: 4 }}
+            onChange={handleChange('firstname')} />
+            <TextField autoFocus fullWidth id='lastname' label='Last Name' sx={{ marginBottom: 4 }}
+            onChange={handleChange('lastname')} />
+            <TextField fullWidth type='email' label='Email' sx={{ marginBottom: 4 }}
+            onChange={handleChange('email')} />
+            <TextField fullWidth type='number' label='contactNo' sx={{ marginBottom: 4 }}
+            onChange={handleChange('contactNo')} />
             <FormControl fullWidth>
               <InputLabel htmlFor='auth-register-password'>Password</InputLabel>
               <OutlinedInput
@@ -199,7 +248,8 @@ const RegisterPage = () => {
                 </Fragment>
               }
             />
-            <Button fullWidth size='large' type='submit' variant='contained' sx={{ marginBottom: 7 }}>
+            <Button fullWidth size='large' type='submit' variant='contained' sx={{ marginBottom: 7 }}
+            onClick={handleSignUp}>
               Sign up
             </Button>
             <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>

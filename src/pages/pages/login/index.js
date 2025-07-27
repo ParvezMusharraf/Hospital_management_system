@@ -4,6 +4,7 @@ import { useState } from 'react'
 // ** Next Imports
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { loginUser } from 'src/services/api'
 
 // ** MUI Components
 import Box from '@mui/material/Box'
@@ -38,6 +39,7 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 // ** Demo Imports
 import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustration'
+import { jwtDecode } from 'jwt-decode'
 
 // ** Styled Components
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -61,12 +63,30 @@ const LoginPage = () => {
   // ** State
   const [values, setValues] = useState({
     password: '',
-    showPassword: false
+    showPassword: false,
+    email: ''
   })
 
   // ** Hook
   const theme = useTheme()
   const router = useRouter()
+
+  const handleLogin = async () => {
+    const res = await loginUser(values)
+    if (res.code === 'Success') {
+      if (res.token) {
+        try {
+          localStorage.setItem('accessToken', res.token)
+          const decoded = jwtDecode(res.token)
+          router.push("/")
+        } catch (error) {
+          console.error('Invalid token:', error)
+        }
+      }
+    } else {
+      alert('login failed')
+    }
+  }
 
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })
@@ -164,7 +184,14 @@ const LoginPage = () => {
             <Typography variant='body2'>Please sign-in to your account and start the adventure</Typography>
           </Box>
           <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
-            <TextField autoFocus fullWidth id='email' label='Email' sx={{ marginBottom: 4 }} />
+            <TextField
+              autoFocus
+              fullWidth
+              id='email'
+              label='Email'
+              sx={{ marginBottom: 4 }}
+              onChange={handleChange('email')}
+            />
             <FormControl fullWidth>
               <InputLabel htmlFor='auth-login-password'>Password</InputLabel>
               <OutlinedInput
@@ -195,13 +222,7 @@ const LoginPage = () => {
                 <LinkStyled onClick={e => e.preventDefault()}>Forgot Password?</LinkStyled>
               </Link>
             </Box>
-            <Button
-              fullWidth
-              size='large'
-              variant='contained'
-              sx={{ marginBottom: 7 }}
-              onClick={() => router.push('/')}
-            >
+            <Button fullWidth size='large' variant='contained' sx={{ marginBottom: 7 }} onClick={() => handleLogin()}>
               Login
             </Button>
             <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
